@@ -1,38 +1,62 @@
-# Face Anti-Spoofing
+# Face Liveness Detection (Anti-Spoofing)
 
-The project is split into two independently runnable applications:
+A real-time face liveness detection app. It tells whether the person in front of the camera is **REAL**, or a **FAKE** (photo, phone screen, print).
 
-- `frontend/anti-spoof-ui` — React + Vite user interface
-- `backend/Silent-Face-Anti-Spoofing` — FastAPI API and anti-spoofing models
+Built with a **FastAPI** backend and a **React (Vite)** webcam UI, on top of the pre-trained [Silent-Face-Anti-Spoofing](https://github.com/minivision-ai/Silent-Face-Anti-Spoofing) models.
 
-## Run locally on Windows
+![Demo](docs/demo.png)
 
-Open two terminals from this project directory.
+## How it works
 
-In the first terminal, start the API:
-
-```powershell
-npm run dev:api
+```
+Camera -> React (frame capture every 1.5s) -> POST /predict -> FastAPI
+       -> face detection -> 2 anti-spoof models -> {label, is_real, score} -> UI
 ```
 
-In the second terminal, start the frontend:
+## Project structure
 
-```powershell
+```
+backend/Silent-Face-Anti-Spoofing/   FastAPI app (app.py), models, source
+frontend/anti-spoof-ui/              React (Vite) webcam UI
+```
+
+## Run locally (Windows)
+
+**Requirements:** Python 3.11, Node.js
+
+**Backend**
+```bash
+cd backend/Silent-Face-Anti-Spoofing
+py -3.11 -m venv venv
+venv\Scripts\activate
+python -m pip install -r requirements.txt
+python -m pip install fastapi uvicorn python-multipart
+python -m uvicorn app:app --reload --port 8000
+```
+API docs: http://localhost:8000/docs
+
+**Frontend** (new terminal)
+```bash
+cd frontend/anti-spoof-ui
+npm install
 npm run dev
 ```
+Open http://localhost:5173, allow camera access, and click **Start Live Check**.
 
-Open the Vite URL printed in the frontend terminal. The Vite development server
-proxies `/api/predict` to the backend at `http://127.0.0.1:8000/predict`.
+## API
 
-The backend command uses the existing virtual environment at
-`backend/Silent-Face-Anti-Spoofing/venv`. If you create a new environment, install
-the dependencies from that backend directory with
-`python -m pip install -r requirements.txt`, then run Uvicorn from the same
-directory with `python -m uvicorn app:app --host 127.0.0.1 --port 8000`.
+`POST /predict` with an image file (`multipart/form-data`, field `file`)
 
-## Frontend checks
-
-```powershell
-npm run build
-npm run lint
+```json
+{ "is_real": true, "label": "REAL", "score": 0.97 }
 ```
+
+## Limitations
+
+- Accuracy drops in low light.
+- Designed for a single face per frame.
+- Uses a pre-trained model; no custom training done.
+
+## Credits
+
+Model and original code: [minivision-ai/Silent-Face-Anti-Spoofing](https://github.com/minivision-ai/Silent-Face-Anti-Spoofing) (Apache 2.0 License). Backend API and React UI built by Nikhil Kumar.
