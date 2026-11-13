@@ -1,0 +1,10 @@
+{
+  "name": "face-antispoof",
+  "private": true,
+  "scripts": {
+    "dev": "npm --prefix frontend\\anti-spoof-ui run dev -- --host 127.0.0.1",
+    "dev:api": "backend\\Silent-Face-Anti-Spoofing\\venv\\Scripts\\python.exe -m uvicorn --app-dir backend\\Silent-Face-Anti-Spoofing app:app --host 127.0.0.1 --port 8000",
+    "build": "npm --prefix frontend\\anti-spoof-ui run build",
+    "lint": "npm --prefix frontend\\anti-spoof-ui run lint"
+  }
+}
