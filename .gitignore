@@ -1,0 +1,31 @@
+# Dependencies and virtual environments
+**/node_modules/
+**/venv/
+**/.venv/
+
+# Python caches and test artifacts
+**/__pycache__/
+*.py[cod]
+**/.pytest_cache/
+**/.mypy_cache/
+**/.ruff_cache/
+
+# Local datasets and generated outputs
+**/datasets/
+**/saved_logs/
+**/runs/
+**/dist/
+**/coverage/
+**/images/sample/*_result.jpg
+*.log
+
+# Local secrets and private keys
+.env
+.env.*
+!.env.example
+**/*.pem
+**/*.key
+
+# Operating-system files
+.DS_Store
+Thumbs.db
